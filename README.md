@@ -4,15 +4,10 @@
 
 A reusable template for reverse-engineering any website into a clean, modern codebase using AI coding agents. Supports **Vue (Vite)** and **React (Next.js)** frameworks.
 
-**Recommended: [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with Opus 4.8 for best results** — but works with a variety of AI coding agents.
+Point it at a URL, run `/clone-website`, and your AI agent will inspect the site, extract design tokens and assets, write component specs, and dispatch parallel builders to reconstruct every section.
 
-Point it at a URL, run `/clone-website`, and your AI agent will inspect the site, extract design tokens and assets, write component specs, and dispatch parallel builders to reconstruct every section. Add `--framework react` to generate a React/Next.js project instead of Vue.
-
-## Demo
-
-[![Watch the demo](docs/design-references/comparison.png)](https://youtu.be/O669pVZ_qr0)
-
-> Click the image above to watch the full demo on YouTube.
+- Default: `--framework vue` → Vite 6 + Vue 3 + shadcn-vue
+- Optional: `--framework react` → Next.js 16 + React 19 + shadcn/ui
 
 ## Quick Install (npx skills add)
 
@@ -32,29 +27,26 @@ This installs the skill to your current project's `.claude/skills/` directory (a
 
    On the GitHub page for this project, click **Use this template**, then click **Create a new repository**.
 
-   Give your new repository a name, choose whether it should be public or private, then click **Create repository**. If GitHub shows an **Include all branches** option, you can leave it off.
-
-   This gives you your own separate project to work in, so your website changes stay in your account instead of coming back to the main template.
-
-2. **Open your new repository on your computer**
-
-   After GitHub creates your copy, open that new repository. Click **Code** and open or clone your new repository with your preferred coding tool.
-
-   If you use the terminal, the command will look like this:
-
+2. **Clone your new repository**
    ```bash
    git clone https://github.com/YOUR-USERNAME/YOUR-NEW-REPOSITORY.git
    cd YOUR-NEW-REPOSITORY
    ```
 
-3. **Install dependencies**
+3. **Install dependencies** (choose your framework)
    ```bash
-   npm install
+   # Vue (default)
+   cd templates/vue && npm install
+
+   # React
+   cd templates/react && npm install
    ```
+
 4. **Start your AI agent** — Claude Code recommended:
    ```bash
    claude --chrome
    ```
+
 5. **Run the skill**:
    ```
    /clone-website <target-url1> [<target-url2> ...]
@@ -63,6 +55,7 @@ This installs the skill to your current project's `.claude/skills/` directory (a
    ```
    /clone-website --framework react <target-url1> [<target-url2> ...]
    ```
+
 6. **Customize** (optional) — after the base clone is built, modify as needed
 
 > Using a different agent? Open `AGENTS.md` for project instructions — most agents pick it up automatically.
@@ -177,18 +170,12 @@ GEMINI.md                   # Gemini CLI config (imports AGENTS.md)
 Run from within the selected framework directory (`templates/react/` or `templates/vue/`):
 
 ```bash
-npm run dev    # Start dev server
-npm run build  # Production build
-npm run lint   # ESLint check
-npm run typecheck # TypeScript check
-npm run check  # Run lint + typecheck + build
-```
-
-### If using docker
-
-```bash
-docker compose up app --build # build and run the app
-docker compose up dev --build # run the app in dev mode on port 3001
+npm run dev        # Start dev server
+npm run build      # Production build (typecheck + build)
+npm run lint       # ESLint check
+npm run typecheck  # TypeScript check
+npm run check      # Run lint + typecheck + build
+npm run preview    # Preview production build (Vue only)
 ```
 
 ## Updating for Other Platforms
