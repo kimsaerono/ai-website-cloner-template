@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  quality:
+  quality-vue:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -21,16 +21,40 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: cd templates/vue && npm install
 
       - name: Lint
-        run: npm run lint
+        run: cd templates/vue && npm run lint
 
       - name: Type check
-        run: npm run typecheck
+        run: cd templates/vue && npm run typecheck
 
       - name: Build
-        run: npm run build
+        run: cd templates/vue && npm run build
+
+  quality-react:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: cd templates/react && npm install
+
+      - name: Lint
+        run: cd templates/react && npm run lint
+
+      - name: Type check
+        run: cd templates/react && npm run typecheck
+
+      - name: Build
+        run: cd templates/react && npm run build
