@@ -14,7 +14,7 @@ Point it at a URL, run `/clone-website`, and your AI agent will inspect the site
 If you already have a project and just want to add the `/clone-website` skill:
 
 ```bash
-npx skills add https://github.com/kimsaerono/ai-website-cloner-template --skill clone-website
+npx skills add kimsaerono/ai-website-cloner-template --skill clone-website
 ```
 
 This installs the skill to your current project's `.claude/skills/` directory (and other agent directories), so you can immediately run `/clone-website` in your AI coding agent.
