@@ -82,6 +82,17 @@ This installs the skill to your current project's `.claude/skills/` directory (a
 
 - [Node.js](https://nodejs.org/) 24+
 - An AI coding agent (see [Supported Platforms](#supported-platforms))
+- **Chrome MCP** — required for browser automation. Config is included for all platforms:
+
+| Tool | MCP Config File |
+|------|----------------|
+| OpenCode | `opencode.json` |
+| Claude Code | `.claude/settings.json` |
+| Cursor | `.cursor/mcp.json` |
+| VS Code (Copilot) | `.vscode/mcp.json` |
+| Windsurf | `.windsurf/mcp.json` |
+
+If using `npx skills add`, you'll also need to add the Chrome MCP config to your project manually (see the files above for the format).
 
 ## Tech Stack
 
