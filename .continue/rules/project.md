@@ -14,16 +14,31 @@ This version has breaking changes — APIs, conventions, and file structure may 
 # Website Reverse-Engineer Template
 
 ## What This Is
-A reusable template for reverse-engineering any website into a clean, modern Next.js codebase using AI coding agents. The Next.js + shadcn/ui + Tailwind v4 base is pre-scaffolded — just run `/clone-website <url1> [<url2> ...]`.
+A reusable template for reverse-engineering any website into a clean, modern codebase using AI coding agents. Supports **Vue (Vite)** and **React (Next.js)** frameworks. Just run `/clone-website [--framework vue|react] <url1> [<url2> ...]`.
 
 ## Tech Stack
+
+### Vue (Default)
+- **Framework:** Vite 6 + Vue 3 + Vue Router 4 (TypeScript strict)
+- **UI:** shadcn-vue (Radix-vue primitives, Tailwind CSS v4, `cn()` utility)
+- **Icons:** Lucide Vue Next (default — will be replaced/supplemented by extracted SVGs)
+- **Styling:** Tailwind CSS v4 with oklch design tokens
+- **Deployment:** Vercel / Netlify / Static hosting
+
+### React
 - **Framework:** Next.js 16 (App Router, React 19, TypeScript strict)
 - **UI:** shadcn/ui (Radix primitives, Tailwind CSS v4, `cn()` utility)
 - **Icons:** Lucide React (default — will be replaced/supplemented by extracted SVGs)
 - **Styling:** Tailwind CSS v4 with oklch design tokens
 - **Deployment:** Vercel
 
+### Shared
+- **Template location:** `templates/react/` or `templates/vue/`
+- **Asset storage:** `public/images/`, `public/videos/`, `public/seo/`
+- **Research output:** `docs/research/`, `docs/design-references/`
+
 ## Commands
+Run commands from within the selected framework directory (`templates/react/` or `templates/vue/`):
 - `npm run dev` — Start dev server
 - `npm run build` — Production build
 - `npm run lint` — ESLint check
@@ -45,23 +60,38 @@ A reusable template for reverse-engineering any website into a clean, modern Nex
 
 ## Project Structure
 ```
-src/
-  app/              # Next.js routes
-  components/       # React components
-    ui/             # shadcn/ui primitives
-    icons.tsx       # Extracted SVG icons as React components
-  lib/
-    utils.ts        # cn() utility (shadcn)
-  types/            # TypeScript interfaces
-  hooks/            # Custom React hooks
-public/
-  images/           # Downloaded images from target site
-  videos/           # Downloaded videos from target site
-  seo/              # Favicons, OG images, webmanifest
+templates/
+  react/                    # React template (Next.js 16)
+    src/
+      app/                  # Next.js App Router routes
+      components/
+        ui/                 # shadcn/ui primitives
+        icons.tsx           # Extracted SVG icons as React components
+      lib/utils.ts          # cn() utility (shadcn)
+      types/                # TypeScript interfaces
+      hooks/                # Custom React hooks
+    public/                 # Downloaded assets
+    package.json            # Dependencies & scripts
+
+  vue/                      # Vue template (Vite 6)
+    src/
+      assets/main.css       # Global styles with Tailwind CSS v4
+      components/
+        ui/                 # shadcn-vue primitives
+        icons/              # Extracted SVG icons as Vue SFCs
+      lib/utils.ts          # cn() utility (shadcn)
+      views/                # Vue Router page views
+      router/index.ts       # Route definitions
+      App.vue               # Root component
+      main.ts               # Entry point
+    public/                 # Downloaded assets
+    index.html              # HTML entry point
+    package.json            # Dependencies & scripts
+
 docs/
-  research/         # Inspection output (design tokens, components, layout)
-  design-references/ # Screenshots and visual references
-scripts/            # Asset download scripts
+  research/                 # Inspection output (design tokens, components, layout)
+  design-references/        # Screenshots and visual references
+scripts/                    # Asset download scripts
 ```
 
 ## MOST IMPORTANT NOTES

@@ -6,6 +6,24 @@
 
 You are about to reverse-engineer and rebuild **the target URL provided by the user** as pixel-perfect clones.
 
+## Framework Selection
+
+Parse `the target URL provided by the user` for an optional `--framework` flag:
+- `--framework vue` (default) — Generate a Vite + Vue 3 + shadcn-vue project from `templates/vue/`
+- `--framework react` — Generate a Next.js 16 + React 19 + shadcn/ui project from `templates/react/`
+
+If no `--framework` flag is provided, default to `vue`. After extracting the flag, the remaining arguments are the target URLs.
+
+The framework choice determines:
+- **Template directory:** `templates/react/` or `templates/vue/`
+- **Source directory:** `templates/react/src/` or `templates/vue/src/`
+- **Component format:** `.tsx` (React) or `.vue` (Vue SFC)
+- **Routing:** Next.js App Router (React) or Vue Router (Vue)
+- **UI primitives:** shadcn/ui with Radix (React) or shadcn-vue with Radix-vue (Vue)
+- **Entry point:** `templates/react/src/app/layout.tsx` (React) or `templates/vue/src/App.vue` (Vue)
+
+All other aspects (Tailwind CSS v4, oklch tokens, asset downloading, component spec format) are identical across frameworks.
+
 When multiple URLs are provided, process them independently and in parallel where possible, while keeping each site's extraction artifacts isolated in dedicated folders (for example, `docs/research/<hostname>/`).
 
 This is not a two-phase process (inspect then build). You are a **foreman walking the job site** — as you inspect each section of the page, you write a detailed specification to a file, then hand that file to a specialist builder agent with everything they need. Extraction and construction happen in parallel, but extraction is meticulous and produces auditable artifacts.
@@ -24,8 +42,8 @@ If the user provides additional instructions (specific fidelity level, customiza
 ## Pre-Flight
 
 1. **Browser automation is required.** Check for available browser MCP tools (Chrome MCP, Playwright MCP, Browserbase MCP, Puppeteer MCP, etc.). Use whichever is available — if multiple exist, prefer Chrome MCP. If none are detected, ask the user which browser tool they have and how to connect it. This skill cannot work without browser automation.
-2. Parse `the target URL provided by the user` as one or more URLs. Normalize and validate each URL; if any are invalid, ask the user to correct them before proceeding. For each valid URL, verify it is accessible via your browser MCP tool.
-3. Verify the base project builds: `npm run build`. The Next.js + shadcn/ui + Tailwind v4 scaffold should already be in place. If not, tell the user to set it up first.
+2. Parse `the target URL provided by the user` for the optional `--framework react|vue` flag (default: `vue`). Extract the remaining arguments as target URLs. Normalize and validate each URL; if any are invalid, ask the user to correct them before proceeding. For each valid URL, verify it is accessible via your browser MCP tool.
+3. Verify the base project builds: `cd templates/<framework> && npm install && npm run build`. The scaffold (Next.js + shadcn/ui for React, or Vite + Vue 3 + shadcn-vue for Vue) should already be in place. If not, tell the user to set it up first.
 4. Create the output directories if they don't exist: `docs/research/`, `docs/research/components/`, `docs/design-references/`, `scripts/`. For multiple clones, also prepare per-site folders like `docs/research/<hostname>/` and `docs/design-references/<hostname>/`.
 5. When working with multiple sites in one command, optionally confirm whether to run them in parallel (recommended, if resources allow) or sequentially to avoid overload.
 
@@ -174,12 +192,23 @@ Save this as `docs/research/PAGE_TOPOLOGY.md` — it becomes your assembly bluep
 
 ## Phase 2: Foundation Build
 
-This is sequential. Do it yourself (not delegated to an agent) since it touches many files:
+This is sequential. Do it yourself (not delegated to an agent) since it touches many files. All file paths below are relative to `templates/<framework>/`.
 
-1. **Update fonts** in `layout.tsx` to match the target site's actual fonts
-2. **Update globals.css** with the target's color tokens, spacing values, keyframe animations, utility classes, and any **global scroll behaviors** (Lenis, smooth scroll CSS, scroll-snap on body)
+### React (Next.js)
+
+1. **Update fonts** in `src/app/layout.tsx` to match the target site's actual fonts
+2. **Update globals.css** (`src/app/globals.css`) with the target's color tokens, spacing values, keyframe animations, utility classes, and any **global scroll behaviors** (Lenis, smooth scroll CSS, scroll-snap on body)
 3. **Create TypeScript interfaces** in `src/types/` for the content structures you've observed
 4. **Extract SVG icons** — find all inline `<svg>` elements on the page, deduplicate them, and save as named React components in `src/components/icons.tsx`. Name them by visual function (e.g., `SearchIcon`, `ArrowRightIcon`, `LogoIcon`).
+5. **Download global assets** — write and run a Node.js script (`scripts/download-assets.mjs`) that downloads all images, videos, and other binary assets from the page to `public/`. Preserve meaningful directory structure.
+6. Verify: `npm run build` passes
+
+### Vue (Vite)
+
+1. **Update fonts** — add Google Fonts via `<link>` in `index.html` or install via `@fontsource` packages
+2. **Update main.css** (`src/assets/main.css`) with the target's color tokens, spacing values, keyframe animations, utility classes, and any **global scroll behaviors** (Lenis, smooth scroll CSS, scroll-snap on body)
+3. **Create TypeScript interfaces** in `src/types/` for the content structures you've observed
+4. **Extract SVG icons** — find all inline `<svg>` elements on the page, deduplicate them, and save as named Vue components in `src/components/icons/`. Name them by visual function (e.g., `SearchIcon.vue`, `ArrowRightIcon.vue`, `LogoIcon.vue`).
 5. **Download global assets** — write and run a Node.js script (`scripts/download-assets.mjs`) that downloads all images, videos, and other binary assets from the page to `public/`. Preserve meaningful directory structure.
 6. Verify: `npm run build` passes
 

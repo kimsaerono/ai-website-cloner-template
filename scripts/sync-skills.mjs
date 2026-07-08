@@ -31,7 +31,7 @@ if (!match) {
 }
 
 const body = match[2];
-const shortDesc = 'Reverse-engineer and clone any website as a pixel-perfect replica';
+const shortDesc = 'Reverse-engineer and clone any website as a pixel-perfect replica (supports React and Vue frameworks)';
 
 // --- Helpers ---
 
@@ -52,6 +52,9 @@ const noArgs = (text) => text.replace(/\$ARGUMENTS/g, 'the target URL provided b
 
 console.log('Syncing clone-website skill to all platforms...');
 console.log(`  Source: .claude/skills/clone-website/SKILL.md\n`);
+
+// 0. npx skills add — standard skills/ directory at repo root
+write('skills/clone-website/SKILL.md', raw);
 
 // 1. Codex CLI — same SKILL.md format, same $ARGUMENTS syntax
 write('.codex/skills/clone-website/SKILL.md', raw);
@@ -85,7 +88,7 @@ write(
 // 7. Augment Code — markdown + YAML frontmatter
 write(
   '.augment/commands/clone-website.md',
-  `---\ndescription: "${shortDesc}"\nargument-hint: "<url>"\n---\n${HEADER}${body}`
+  `---\ndescription: "${shortDesc}"\nargument-hint: "[--framework react|vue] <url>"\n---\n${HEADER}${body}`
 );
 
 // 8. Continue — prompt file with invokable: true
@@ -102,11 +105,11 @@ write(
       name: 'clone-website',
       description: shortDesc,
       prompt: noArgs(body),
-      fileContext: ['AGENTS.md', 'docs/research/**'],
+      fileContext: ['AGENTS.md', 'docs/research/**', 'templates/**'],
     },
     null,
     2
   ) + '\n'
 );
 
-console.log('\nDone! 9 platform command files generated from source skill.');
+console.log('\nDone! 10 platform command files generated from source skill.');

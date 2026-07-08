@@ -1,18 +1,28 @@
 # AI Website Cloner Template
 
-<a href="https://github.com/JCodesMore/ai-website-cloner-template/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a> <a href="https://github.com/JCodesMore/ai-website-cloner-template/stargazers"><img src="https://img.shields.io/github/stars/JCodesMore/ai-website-cloner-template?style=flat" alt="Stars" /></a> <a href="https://discord.gg/hrTSX5yTpB"><img src="https://img.shields.io/discord/1400896964597383279?label=discord" alt="Discord" /></a>
+<a href="https://github.com/kimsaerono/ai-website-cloner-template/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a> <a href="https://github.com/kimsaerono/ai-website-cloner-template/stargazers"><img src="https://img.shields.io/github/stars/kimsaerono/ai-website-cloner-template?style=flat" alt="Stars" /></a>
 
-A reusable template for reverse-engineering any website into a clean, modern Next.js codebase using AI coding agents. 
+A reusable template for reverse-engineering any website into a clean, modern codebase using AI coding agents. Supports **Vue (Vite)** and **React (Next.js)** frameworks.
 
 **Recommended: [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with Opus 4.8 for best results** — but works with a variety of AI coding agents.
 
-Point it at a URL, run `/clone-website`, and your AI agent will inspect the site, extract design tokens and assets, write component specs, and dispatch parallel builders to reconstruct every section.
+Point it at a URL, run `/clone-website`, and your AI agent will inspect the site, extract design tokens and assets, write component specs, and dispatch parallel builders to reconstruct every section. Add `--framework react` to generate a React/Next.js project instead of Vue.
 
 ## Demo
 
 [![Watch the demo](docs/design-references/comparison.png)](https://youtu.be/O669pVZ_qr0)
 
 > Click the image above to watch the full demo on YouTube.
+
+## Quick Install (npx skills add)
+
+If you already have a project and just want to add the `/clone-website` skill:
+
+```bash
+npx skills add https://github.com/kimsaerono/ai-website-cloner-template --skill clone-website
+```
+
+This installs the skill to your current project's `.claude/skills/` directory (and other agent directories), so you can immediately run `/clone-website` in your AI coding agent.
 
 ## Quick Start
 
@@ -49,6 +59,10 @@ Point it at a URL, run `/clone-website`, and your AI agent will inspect the site
    ```
    /clone-website <target-url1> [<target-url2> ...]
    ```
+   Or for React:
+   ```
+   /clone-website --framework react <target-url1> [<target-url2> ...]
+   ```
 6. **Customize** (optional) — after the base clone is built, modify as needed
 
 > Using a different agent? Open `AGENTS.md` for project instructions — most agents pick it up automatically.
@@ -78,6 +92,13 @@ Point it at a URL, run `/clone-website`, and your AI agent will inspect the site
 
 ## Tech Stack
 
+### Vue (Default)
+- **Vite 6** — Vue 3, Vue Router 4, TypeScript strict
+- **shadcn-vue** — Radix-vue primitives + Tailwind CSS v4
+- **Tailwind CSS v4** — oklch design tokens
+- **Lucide Vue Next** — default icons (replaced by extracted SVGs during cloning)
+
+### React
 - **Next.js 16** — App Router, React 19, TypeScript strict
 - **shadcn/ui** — Radix primitives + Tailwind CSS v4
 - **Tailwind CSS v4** — oklch design tokens
@@ -110,30 +131,50 @@ Each builder agent receives the full component specification inline — exact `g
 ## Project Structure
 
 ```
-src/
-  app/              # Next.js routes
-  components/       # React components
-    ui/             # shadcn/ui primitives
-    icons.tsx       # Extracted SVG icons
-  lib/utils.ts      # cn() utility
-  types/            # TypeScript interfaces
-  hooks/            # Custom React hooks
-public/
-  images/           # Downloaded images from target
-  videos/           # Downloaded videos from target
-  seo/              # Favicons, OG images
+templates/
+  react/                    # React template (Next.js 16)
+    src/
+      app/                  # Next.js routes
+      components/
+        ui/                 # shadcn/ui primitives
+        icons.tsx           # Extracted SVG icons
+      lib/utils.ts          # cn() utility
+      types/                # TypeScript interfaces
+      hooks/                # Custom React hooks
+    public/                 # Downloaded assets
+    package.json
+
+  vue/                      # Vue template (Vite 6)
+    src/
+      assets/main.css       # Global styles
+      components/
+        ui/                 # shadcn-vue primitives
+        icons/              # Extracted SVG icons
+      views/                # Page views
+      router/index.ts       # Route definitions
+      lib/utils.ts          # cn() utility
+      types/                # TypeScript interfaces
+      hooks/                # Custom Vue composables
+      App.vue               # Root component
+      main.ts               # Entry point
+    public/                 # Downloaded assets
+    index.html              # HTML entry point
+    package.json
+
 docs/
-  research/         # Extraction output & component specs
-  design-references/ # Screenshots
+  research/                 # Extraction output & component specs
+  design-references/        # Screenshots
 scripts/
-  sync-agent-rules.sh  # Regenerate agent instruction files
-  sync-skills.mjs      # Regenerate /clone-website for all platforms
-AGENTS.md           # Agent instructions (single source of truth)
-CLAUDE.md           # Claude Code config (imports AGENTS.md)
-GEMINI.md           # Gemini CLI config (imports AGENTS.md)
+  sync-agent-rules.sh       # Regenerate agent instruction files
+  sync-skills.mjs           # Regenerate /clone-website for all platforms
+AGENTS.md                   # Agent instructions (single source of truth)
+CLAUDE.md                   # Claude Code config (imports AGENTS.md)
+GEMINI.md                   # Gemini CLI config (imports AGENTS.md)
 ```
 
 ## Commands
+
+Run from within the selected framework directory (`templates/react/` or `templates/vue/`):
 
 ```bash
 npm run dev    # Start dev server
@@ -164,7 +205,7 @@ Each script regenerates the platform-specific copies automatically. Agents that 
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=JCodesMore/ai-website-cloner-template&type=Date)](https://star-history.com/#JCodesMore/ai-website-cloner-template&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=kimsaerono/ai-website-cloner-template&type=Date)](https://star-history.com/#kimsaerono/ai-website-cloner-template&Date)
 
 ## License
 
